@@ -1,6 +1,6 @@
 {
   "name": "eid-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Eid CLI with Hijri-aware Eid, Shawwal, and Islamic date status.",
   "type": "module",
   "bin": {
