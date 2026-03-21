@@ -4,7 +4,7 @@
   "description": "Eid CLI with Hijri-aware Eid, Shawwal, and Islamic date status.",
   "type": "module",
   "bin": {
-    "eid-cli": "./dist/cli.js"
+    "eid-cli": "dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +32,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/muhmp/eid-cli.git"
+    "url": "git+https://github.com/muhmp/eid-cli.git"
   },
   "homepage": "https://github.com/muhmp/eid-cli#readme",
   "bugs": {

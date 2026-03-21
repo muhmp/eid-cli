@@ -383,9 +383,17 @@ export const buildEidResponse = (
 };
 
 const renderStatusLine = (response: EidOutput): void => {
-  const line = response.statusLine.replace(/^Status:\s*/, "");
-  const next = response.nextLine.replace(/^Up next:\s*/, "");
-  console.log(`${line} • ${next}`);
+  if (response.mode === "eid-days") {
+    console.log(response.eventLabel);
+    return;
+  }
+
+  if (response.mode === "pre-eid") {
+    console.log(`${response.eventLabel} countdown`);
+    return;
+  }
+
+  console.log(`${response.eventLabel} passed`);
 };
 
 const repeat = (char: string, length: number): string => char.repeat(Math.max(length, 0));
