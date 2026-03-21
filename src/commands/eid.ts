@@ -58,7 +58,6 @@ interface EidOutput {
   readonly mode: "pre-eid" | "eid-days" | "post-eid";
   readonly event: EidEventKey;
   readonly eventLabel: string;
-  readonly phase: string;
   readonly label: string;
   readonly detail: string;
   readonly statusLine: string;
@@ -278,7 +277,6 @@ const buildResponse = (
   const inEventWindow = daysSincePrevious !== null && daysSincePrevious >= 0 && daysSincePrevious <= 2;
 
   let mode: EidOutput["mode"];
-  let phase: string;
   let label: string;
   let detail: string;
   let statusLine: string;
@@ -287,7 +285,6 @@ const buildResponse = (
   if (inEventWindow) {
     const dayNumber = daysSincePrevious + 1;
     mode = "eid-days";
-    phase = `Day ${dayNumber} of 3`;
     label = `${event.label} Day ${dayNumber}`;
     detail = `${event.label} is being observed. Day ${dayNumber} of 3.`;
     statusLine = "Status: Active Eid day";
@@ -297,7 +294,6 @@ const buildResponse = (
         : `Up next: ${event.postMonthName} ${hijri.day + 1} tomorrow`;
   } else if (daysUntilNext !== null && daysUntilNext > 0) {
     mode = "pre-eid";
-    phase = "Countdown";
     label = `${hijri.monthName} ${hijri.day}`;
     detail = `${event.label} is in ${daysUntilNext} day${daysUntilNext === 1 ? "" : "s"}.`;
     statusLine = "Status: Before Eid";
@@ -306,7 +302,6 @@ const buildResponse = (
       : `Up next: ${event.label} soon`;
   } else {
     mode = "post-eid";
-    phase = "After Eid";
     label = `${event.postMonthName} ${hijri.day}`;
     detail = `${event.label} has passed. Today is ${label}.`;
     statusLine = "Status: After Eid";
@@ -319,7 +314,6 @@ const buildResponse = (
     mode,
     event: eventKey,
     eventLabel: event.label,
-    phase,
     label,
     detail,
     statusLine,
@@ -361,7 +355,6 @@ export const buildEidResponse = (
     return {
       ...response,
       mode: "post-eid",
-      phase: "After Eid",
       label: `Shawwal ${hijri.day}`,
       detail: `Eid al-Fitr has passed. Today is Shawwal ${hijri.day}.`,
       statusLine: "Status: After Eid"
@@ -372,7 +365,6 @@ export const buildEidResponse = (
     return {
       ...response,
       mode: "post-eid",
-      phase: "After Eid",
       label: `Dhu al-Hijjah ${hijri.day}`,
       detail: `Eid al-Adha has passed. Today is Dhu al-Hijjah ${hijri.day}.`,
       statusLine: "Status: After Eid"
@@ -405,25 +397,21 @@ const renderText = (response: EidOutput, plain: boolean): void => {
   }
 
   const eventValue = response.eventLabel;
-  const phaseValue = response.phase;
   const dateValue = response.prettyGregorianDate;
   const hijriValue = `${response.hijriDate.day} ${response.hijriDate.monthName} ${response.hijriDate.year}`;
 
   const widths = {
     event: Math.max("Event".length, eventValue.length) + 2,
-    phase: Math.max("Phase".length, phaseValue.length) + 2,
     date: Math.max("Date".length, dateValue.length) + 2,
     hijri: Math.max("Hijri".length, hijriValue.length) + 2
   };
 
   const header =
     pad("Event", widths.event) +
-    pad("Phase", widths.phase) +
     pad("Date", widths.date) +
     pad("Hijri", widths.hijri);
   const row =
     pad(eventValue, widths.event) +
-    pad(phaseValue, widths.phase) +
     pad(dateValue, widths.date) +
     pad(hijriValue, widths.hijri);
 
